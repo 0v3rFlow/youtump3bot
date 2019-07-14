@@ -65,6 +65,7 @@ def on_chat_message(msg):
     # Prende l'username
     name = msg['from']['first_name']
 
+    print(content_type, chat_type, chat_id, name)
     if input_text == '/start':
         # Se l'utente digita /start
         messaggio = texti01
