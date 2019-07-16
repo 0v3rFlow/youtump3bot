@@ -15,6 +15,7 @@ texti01 = "Ciao & 😊, per iniziare a scaricare il video in formato mp3 basta i
 texti02 = "Ho recuperato tutte le informazioni del video👍🤓.Inizio a scaricare e convertire..."
 texti03 = "Download effettuato!😈"
 texte01 = "⚠️⚠️ C'è un problema nel link 😭. RIprova e assicurati che sia corretto 🥺."
+texte02 = "⚠️⚠️ Problema nell'invio audio 😭. File troppo grande. Scegliere un video con una minor durata 🥺."
 
 def recupero_info_link(input_text):
 
@@ -28,9 +29,9 @@ def recupero_info_link(input_text):
         return link, title
 
 
-def youtube_to_mp3(link, title, chat_id):
+def youtube_to_mp3(link, title, chat_id, name):
 
-    filename = '%(title)s.%(ext)s'
+    filename = title + '.%(ext)s'
     ydl_opts = {
         'writethumbnail': True,
         'format': 'bestaudio/best',
@@ -44,16 +45,21 @@ def youtube_to_mp3(link, title, chat_id):
         'noplaylist': 'X',
     }
 
-    # Nome del file
-    filename = title + '.mp3'
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([link])
         # Invio l'audio con il file appena scaricato
-        bot.sendAudio(chat_id, audio=open(filename, 'rb'))
-        # Messaggio dowload effettuato con successo
-        bot.sendMessage(chat_id, texti03)
-        # Cancello file.
-        os.remove(filename)
+        try:
+            # Nome del file
+            filename = title + '.mp3'
+            bot.sendAudio(chat_id, audio=open(filename, 'rb'))
+            # Messaggio dowload effettuato con successo
+            bot.sendMessage(chat_id, texti03)
+            print(name + ' ' + 'ha scaricato correttamente' + ' ' + title)
+            # Cancello file.
+            os.remove(filename)
+        except:
+            bot.sendMessage(chat_id, texte02)
+            os.remove(filename)
 
 
 def on_chat_message(msg):
@@ -77,10 +83,12 @@ def on_chat_message(msg):
             link, title = recupero_info_link(input_text)
             # Messaggio per info stato
             bot.sendMessage(chat_id, texti02)
-            youtube_to_mp3(link, title, chat_id)
         except:
             # Se ho qualsiasi tipo di errore durante il recuper delle informazioni o durante il download
             bot.sendMessage(chat_id, texte01)
+
+        # Se sono riuscito ad ottenere il link
+        youtube_to_mp3(link, title, chat_id, name)
 
 TOKEN = os.environ.get('API_TOKEN', None)
 if __name__ == "__main__":
