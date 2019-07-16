@@ -86,10 +86,11 @@ def on_chat_message(msg):
         except:
             # Se ho qualsiasi tipo di errore durante il recuper delle informazioni o durante il download
             bot.sendMessage(chat_id, texte01)
+            link = ''
+            title = ''
           
-        if link:
-            # Se sono riuscito ad ottenere il link
-            youtube_to_mp3(link, title, chat_id, name)
+        # Se sono riuscito ad ottenere il link
+        youtube_to_mp3(link, title, chat_id, name)
 
 TOKEN = os.environ.get('API_TOKEN', None)
 if __name__ == "__main__":
