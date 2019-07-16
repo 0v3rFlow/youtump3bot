@@ -89,8 +89,9 @@ def on_chat_message(msg):
             link = ''
             title = ''
           
-        # Se sono riuscito ad ottenere il link
-        youtube_to_mp3(link, title, chat_id, name)
+        if link:
+            # Se sono riuscito ad ottenere il link
+            youtube_to_mp3(link, title, chat_id, name)
 
 TOKEN = os.environ.get('API_TOKEN', None)
 if __name__ == "__main__":
