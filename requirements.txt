@@ -1,3 +1,2 @@
 telepot
 youtube_dl
-ffmpeg
