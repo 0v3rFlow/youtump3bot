@@ -16,17 +16,29 @@ texti02 = "Ho recuperato tutte le informazioni del video👍🤓.Inizio a scaric
 texti03 = "Download effettuato!😈"
 texte01 = "⚠️⚠️ C'è un problema nel link 😭. RIprova e assicurati che sia corretto 🥺."
 texte02 = "⚠️⚠️ Problema nell'invio audio 😭. File troppo grande. Scegliere un video con una minor durata 🥺."
+texte03 = "⚠️⚠️ Non hai inserito un testo. Riprova e passami il link. 😊"
+texte04 = "Mi dispiace 😔 ma il video è superiore hai 10 minuti, scegline un altro più breve. 😊"
 
 def recupero_info_link(input_text):
+          
+    # Setto le variabili link e title
+    link = ''
+    title = ''
 
     ydl_opts = {'quiet': 'X', 'noplaylist': 'X'}
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         meta = ydl.extract_info(input_text, download=False)
-        # Recuper il link originale
-        link = meta['webpage_url']
-        # Recupero il titolo
-        title = meta['title']
-        return link, title
+        duration = meta['duration']
+        minuti = duration / 60
+        # se il video ha una dura più di 10 minuti non vado avanti
+        if minuti < 10.05:
+            # Recupero il link originale
+            link = meta['webpage_url']
+            # Recupero il titolo
+            title = meta['title']
+            return link, title
+        else:
+            return link, title
 
 
 def youtube_to_mp3(link, title, chat_id, name):
@@ -65,33 +77,41 @@ def youtube_to_mp3(link, title, chat_id, name):
 def on_chat_message(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
-    # Prelevo il messaggio inserito dall'utente
-    input_text = msg['text']
+    input_text = ''
+    # Prelevo il messaggio inserito dall'utente e controllo che sia un testo
+    try:
+        input_text = msg['text']
+    except:
+        bot.sendMessage(chat_id, texte03)
 
-    # Prende l'username
-    name = msg['from']['first_name']
+    if input_text:
+        # Prende l'username
+        name = msg['from']['first_name']
+        print(content_type, chat_type, chat_id, name, input_text)
 
-    print(content_type, chat_type, chat_id, name)
-    if input_text == '/start':
-        # Se l'utente digita /start
-        messaggio = texti01
-        messaggio = messaggio.replace('&', name)
-        bot.sendMessage(chat_id, messaggio)
-    else:
-        try:
-            # Recupero le informazioni dal link. N
-            link, title = recupero_info_link(input_text)
-            # Messaggio per info stato
-            bot.sendMessage(chat_id, texti02)
-        except:
-            # Se ho qualsiasi tipo di errore durante il recuper delle informazioni o durante il download
-            bot.sendMessage(chat_id, texte01)
-            link = ''
-            title = ''
-          
-        if link:
-            # Se sono riuscito ad ottenere il link
-            youtube_to_mp3(link, title, chat_id, name)
+        if input_text == '/start':
+            # Se l'utente digita /start
+            messaggio = texti01
+            messaggio = messaggio.replace('&', name)
+            bot.sendMessage(chat_id, messaggio)
+        else:
+            try:
+                # Recupero le informazioni dal link. N
+                link, title = recupero_info_link(input_text)
+                if link:
+                    # Messaggio per info stato
+                    bot.sendMessage(chat_id, texti02)
+                else:
+                    bot.sendMessage(chat_id, texte04)
+            except:
+                # Se ho qualsiasi tipo di errore durante il recuper delle informazioni o durante il download
+                bot.sendMessage(chat_id, texte01)
+                link = ''
+                title = ''
+
+            if link:
+                # Se sono riuscito ad ottenere il link
+                youtube_to_mp3(link, title, chat_id, name)
 
 TOKEN = os.environ.get('API_TOKEN', None)
 if __name__ == "__main__":
