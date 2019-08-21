@@ -17,7 +17,7 @@ texti03 = "Download effettuato!😈"
 texte01 = "⚠️⚠️ C'è un problema nel link 😭. RIprova e assicurati che sia corretto 🥺."
 texte02 = "⚠️⚠️ Problema nell'invio audio 😭. File troppo grande. Scegliere un video con una minor durata 🥺."
 texte03 = "⚠️⚠️ Non hai inserito un testo. Riprova e passami il link. 😊"
-texte04 = "Mi dispiace 😔 ma il video è superiore hai 10 minuti, scegline un altro più breve. 😊"
+texte04 = "Mi dispiace 😔 ma il video è superiore ai 10 minuti, scegline un altro più breve. 😊"
 
 def recupero_info_link(input_text):
           
