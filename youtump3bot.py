@@ -8,7 +8,7 @@ import os
 from telepot.loop import MessageLoop
 
 texti01 = "Ciao & 😊, per iniziare a scaricare il video in formato mp3 basta inviarmi il link di youtube 🧲, al resto ci penso io ✌️😎."\
-          "Sei libero di salvare il file tra le tue canzoni oppure lasciarlo su telegramm."\
+          "Sei libero di salvare il file tra le tue canzoni oppure lasciarlo su telegram."\
           "Se apri l'audio rimarrà attivo anche se apri altre applicazioni."\
           "Buon divertimento 😁"
 
